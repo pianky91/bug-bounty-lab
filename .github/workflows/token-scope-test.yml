@@ -1,0 +1,29 @@
+name: Token Scope Test
+on: 
+  workflow_dispatch:
+  push:
+
+jobs:
+  test-permissions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Test GITHUB_TOKEN permissions
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "=== Testing Token Permissions ==="
+          
+          # Test repo access
+          echo "Repo info:"
+          gh api repos/${{ github.repository }}
+          
+          # Test user info
+          echo "User info:"
+          gh api user
+          
+          # List repo secrets (should fail)
+          echo "Trying to list secrets:"
+          gh api repos/${{ github.repository }}/actions/secrets || echo "Failed (expected)"
