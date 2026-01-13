@@ -1,0 +1,15 @@
+name: PR Injection Test
+on:
+  pull_request_target:
+    types: [opened, edited]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dangerous command execution
+        run: |
+          # هل ده vulnerable؟
+          TITLE="${{ github.event.pull_request.title }}"
+          echo "PR Title: $TITLE"
+          eval "echo Processing: $TITLE"
