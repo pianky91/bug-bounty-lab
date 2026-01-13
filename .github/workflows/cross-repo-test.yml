@@ -1,0 +1,24 @@
+name: Cross Repo Access Test
+on: workflow_dispatch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Try to access other repos
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "=== Testing Cross-Repo Access ==="
+          
+          # جرب repos عامة تانية
+          echo "Trying public repo:"
+          gh api repos/github/docs || echo "Failed"
+          
+          # جرب repos خاصة (لو عندك)
+          echo "Trying to list your repos:"
+          gh api user/repos || echo "Failed as expected"
+          
+          # جرب workflow runs لـ repos تانية
+          echo "Trying other repo workflows:"
+          gh api repos/github/docs/actions/runs || echo "Failed"
